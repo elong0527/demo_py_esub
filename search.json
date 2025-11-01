@@ -1,0 +1,442 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "DEMO-001 Analysis Results",
+    "section": "",
+    "text": "DEMO-001",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Overview",
+    "text": "Overview\ndemo-py-esub is a demo project that illustrates how to organize analysis scripts using Python in a recommended folder structure for clinical study reports and regulatory submissions.\nThis demo project follows the concepts discussed in Python for Clinical Study Reports and Submission.",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Features",
+    "text": "Features\nBy using the recommended folder structure and associated development tools, this project demonstrates:\n\nConsistency: Standardized project organization\nAutomation: Automated testing and code quality checks\nReproducibility: Isolated environment management with uv\nCompliance: Best practices for regulatory submissions",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#folder-structure",
+    "href": "index.html#folder-structure",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Folder Structure",
+    "text": "Folder Structure\nThis project follows a standardized folder structure for clinical study reports and regulatory submissions:\n\nMinimal Sufficient Folders and Files\n\npyproject.toml: Python project metadata and dependencies\nuv.lock: Lock file for reproducible environments\n_quarto.yml: Quarto book configuration\nindex.qmd: Book homepage\nanalysis/: Analysis scripts using Quarto Markdown\ndata/: ADaM datasets in Parquet format\noutput/: Generated tables, listings, and figures (TLF)\n\n\n\nAdditional Folders and Files\n\n.venv/: Virtual environment (created by uv)\n.python-version: Python version specification\npython-package/demo001/: DEMO-001 study-specific Python package\n_book/: Rendered Quarto book output\n.gitignore: Git ignore patterns\n\n\n\nProject Structure\ndemo-py-esub/\n├── pyproject.toml           # Project configuration and dependencies\n├── uv.lock                  # Dependency lock file\n├── _quarto.yml             # Quarto book configuration\n├── index.qmd               # Book homepage\n├── analysis/               # Analysis scripts\n│   ├── tlf-01-disposition.qmd\n│   ├── tlf-02-population.qmd\n│   ├── tlf-03-baseline.qmd\n│   ├── tlf-04-efficacy-ancova.qmd\n│   ├── tlf-05-ae-summary.qmd\n│   └── tlf-06-specific.qmd\n├── data/                   # ADaM datasets\n│   ├── adsl.parquet\n│   ├── adae.parquet\n│   └── adlbc.parquet\n├── output/                 # Generated TLF outputs\n└── python-package/         # Clinical biostatistics package\n    └── demo001/\n        ├── __init__.py     # Package initialization\n        ├── utils.py        # Utility functions\n        ├── population.py   # Population analysis functions\n        ├── baseline.py     # Baseline characteristics functions\n        ├── safety.py       # Safety analysis functions\n        └── efficacy.py     # Efficacy analysis functions\n\n\nKey Goals of This Structure\n\nConsistency: Standardized organization across projects\nAutomation: Seamless integration with CI/CD pipelines\nReproducibility: Isolated environments and locked dependencies\nCompliance: Follows regulatory submission best practices\n\n\n\nBenefits of This Approach\n\nCode Reusability: Functions can be used across multiple analyses\nStandardization: Consistent methodology across studies\nQuality Assurance: Centralized, tested functions reduce errors\nRegulatory Compliance: Standardized approaches for submissions\nMaintainability: Easy to update and improve functions",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Usage",
+    "text": "Usage\n\nInstall the Package\n# Install in development mode\nuv pip install -e .\n\n\nRun Analysis\n# Render all analysis reports\nquarto render\n\n# Or render individual files\nquarto render analysis/tlf-01-disposition.qmd",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#requirements",
+    "href": "index.html#requirements",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Requirements",
+    "text": "Requirements\n\nPython 3.14.0\nuv package manager",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Installation",
+    "text": "Installation\n\nClone the repository: bash  git https://github.com/elong0527/demo_py_esub  cd demo-py-esub\nInstall uv (if not already installed): bash  # Follow instructions at: https://pycsr.org/env-uv.html#installing-uv  curl -LsSf https://astral.sh/uv/install.sh | sh\nCreate and activate the project environment: bash  uv sync\nActivate the virtual environment:\n\nWindows: .venv\\Scripts\\activate\nmacOS/Linux: source .venv/bin/activate",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html",
+    "href": "analysis/tlf-01-disposition.html",
+    "title": "1  Disposition of participants",
+    "section": "",
+    "text": "1.1 Step 1: Load Data\nWe start by loading the Subject-level Analysis Dataset (ADSL), which contains all participant information needed for our disposition table.\nThe ADSL dataset stores participant-level information including treatment assignments and study completion status. We’re using the parquet format for data storage.\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nLet’s examine the key variables we’ll use to build our disposition table:\nadsl.select([\"USUBJID\", \"TRT01P\", \"TRT01PN\", \"DISCONFL\", \"DCREASCD\"])\n\n\nshape: (254, 5)\n\n\n\nUSUBJID\nTRT01P\nTRT01PN\nDISCONFL\nDCREASCD\n\n\nstr\nstr\ni64\nstr\nstr\n\n\n\n\n\"01-701-1015\"\n\"Placebo\"\n0\n\"\"\n\"Completed\"\n\n\n\"01-701-1023\"\n\"Placebo\"\n0\n\"Y\"\n\"Adverse Event\"\n\n\n\"01-701-1028\"\n\"Xanomeline High Dose\"\n81\n\"\"\n\"Completed\"\n\n\n…\n…\n…\n…\n…\n\n\n\"01-718-1371\"\n\"Xanomeline High Dose\"\n81\n\"Y\"\n\"Adverse Event\"\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n81\n\"Y\"\n\"Lack of Efficacy\"",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-1-load-data",
+    "href": "analysis/tlf-01-disposition.html#step-1-load-data",
+    "title": "1  Disposition of participants",
+    "section": "",
+    "text": "USUBJID: Unique identifier for each participant\nTRT01P: Treatment name (text)\nTRT01PN: Treatment group (numeric code)\nDISCONFL: Flag indicating if participant discontinued (Y/N)\nDCREASCD: Specific reason for discontinuation",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-2-count-total-participants",
+    "href": "analysis/tlf-01-disposition.html#step-2-count-total-participants",
+    "title": "1  Disposition of participants",
+    "section": "1.2 Step 2: Count Total Participants",
+    "text": "1.2 Step 2: Count Total Participants\nFirst, we count how many participants were enrolled in each treatment group.\nWe group participants by treatment arm and count them using .group_by() and .agg(). The .pivot() operation reshapes our data from long format (rows for each treatment) to wide format (columns for each treatment), which matches the standard disposition table layout.\n\nn_rand = (\n    adsl\n    .group_by(\"TRT01PN\")\n    .agg(n = pl.len())\n    .with_columns([\n        pl.lit(\"Participants in population\").alias(\"row\"),\n        pl.lit(None, dtype=pl.Float64).alias(\"pct\") # Placeholder for percentage (not applicable for totals)\n    ])\n    .pivot(\n        index=\"row\",\n        on=\"TRT01PN\",\n        values=[\"n\", \"pct\"],\n        sort_columns=True\n    )\n)\n\nn_rand\n\n\nshape: (1, 7)\n\n\n\nrow\nn_0\nn_54\nn_81\npct_0\npct_54\npct_81\n\n\nstr\nu32\nu32\nu32\nf64\nf64\nf64\n\n\n\n\n\"Participants in population\"\n86\n84\n84\nnull\nnull\nnull",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-3-count-completed-participants",
+    "href": "analysis/tlf-01-disposition.html#step-3-count-completed-participants",
+    "title": "1  Disposition of participants",
+    "section": "1.3 Step 3: Count Completed Participants",
+    "text": "1.3 Step 3: Count Completed Participants\nNext, we identify participants who successfully completed the study and calculate what percentage they represent of each treatment group.\nWe filter for participants where DCREASCD == \"Completed\", then calculate both counts and percentages. The .join() operation brings in the total count for each treatment group so we can compute percentages.\n\nn_complete = (\n    adsl\n    .filter(pl.col(\"DCREASCD\") == \"Completed\")\n    .group_by(\"TRT01PN\")\n    .agg(n = pl.len())\n    .join(\n        adsl.group_by(\"TRT01PN\").agg(total = pl.len()),\n        on=\"TRT01PN\"\n    )\n    .with_columns([\n        pl.lit(\"Completed\").alias(\"row\"),\n        (100.0 * pl.col(\"n\") / pl.col(\"total\")).round(1).alias(\"pct\")\n    ])\n    .pivot(\n        index=\"row\",\n        on=\"TRT01PN\",\n        values=[\"n\", \"pct\"],\n        sort_columns=True\n    )\n)\n\nn_complete\n\n\nshape: (1, 7)\n\n\n\nrow\nn_0\nn_54\nn_81\npct_0\npct_54\npct_81\n\n\nstr\nu32\nu32\nu32\nf64\nf64\nf64\n\n\n\n\n\"Completed\"\n58\n25\n27\n67.4\n29.8\n32.1",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-4-count-discontinued-participants",
+    "href": "analysis/tlf-01-disposition.html#step-4-count-discontinued-participants",
+    "title": "1  Disposition of participants",
+    "section": "1.4 Step 4: Count Discontinued Participants",
+    "text": "1.4 Step 4: Count Discontinued Participants\nNow we count participants who left the study early, regardless of their specific reason.\nWe filter for participants where the discontinuation flag DISCONFL == \"Y\", then follow the same pattern of counting and calculating percentages within each treatment group.\n\nn_disc = (\n    adsl\n    .filter(pl.col(\"DISCONFL\") == \"Y\")\n    .group_by(\"TRT01PN\")\n    .agg(n = pl.len())\n    .join(\n        adsl.group_by(\"TRT01PN\").agg(total = pl.len()),\n        on=\"TRT01PN\"\n    )\n    .with_columns([\n        pl.lit(\"Discontinued\").alias(\"row\"),\n        (100.0 * pl.col(\"n\") / pl.col(\"total\")).round(1).alias(\"pct\")\n    ])\n    .pivot(\n        index=\"row\",\n        on=\"TRT01PN\",\n        values=[\"n\", \"pct\"],\n        sort_columns=True\n    )\n)\n\nn_disc\n\n\nshape: (1, 7)\n\n\n\nrow\nn_0\nn_54\nn_81\npct_0\npct_54\npct_81\n\n\nstr\nu32\nu32\nu32\nf64\nf64\nf64\n\n\n\n\n\"Discontinued\"\n28\n59\n57\n32.6\n70.2\n67.9",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-5-break-down-discontinuation-reasons",
+    "href": "analysis/tlf-01-disposition.html#step-5-break-down-discontinuation-reasons",
+    "title": "1  Disposition of participants",
+    "section": "1.5 Step 5: Break Down Discontinuation Reasons",
+    "text": "1.5 Step 5: Break Down Discontinuation Reasons\nFor regulatory reporting, we need to show the specific reasons why participants discontinued.\nWe filter out completed participants, then group by both treatment and discontinuation reason. The indentation (four spaces) in the row labels helps show these are subcategories under “Discontinued”. We also use .fill_null(0) to handle cases where certain discontinuation reasons don’t occur in all treatment groups.\n\nn_reason = (\n    adsl\n    .filter(pl.col(\"DCREASCD\") != \"Completed\")\n    .group_by([\"TRT01PN\", \"DCREASCD\"])\n    .agg(n = pl.len())\n    .join(\n        adsl.group_by(\"TRT01PN\").agg(total = pl.len()),\n        on=\"TRT01PN\"\n    )\n    .with_columns([\n        pl.concat_str([pl.lit(\"    \"), pl.col(\"DCREASCD\")]).alias(\"row\"),\n        (100.0 * pl.col(\"n\") / pl.col(\"total\")).round(1).alias(\"pct\")\n    ])\n    .pivot(\n        index=\"row\",\n        on=\"TRT01PN\",\n        values=[\"n\", \"pct\"],\n        sort_columns=True\n    )\n    .with_columns([\n        pl.col([\"n_0\", \"n_54\", \"n_81\"]).fill_null(0),\n        pl.col([\"pct_0\", \"pct_54\", \"pct_81\"]).fill_null(0.0)\n    ])\n    .sort(\"row\")\n)\n\nn_reason\n\n\nshape: (9, 7)\n\n\n\nrow\nn_0\nn_54\nn_81\npct_0\npct_54\npct_81\n\n\nstr\nu32\nu32\nu32\nf64\nf64\nf64\n\n\n\n\n\"    Adverse Event\"\n8\n44\n40\n9.3\n52.4\n47.6\n\n\n\"    Death\"\n2\n1\n0\n2.3\n1.2\n0.0\n\n\n\"    I/E Not Met\"\n1\n0\n2\n1.2\n0.0\n2.4\n\n\n…\n…\n…\n…\n…\n…\n…\n\n\n\"    Sponsor Decision\"\n2\n2\n3\n2.3\n2.4\n3.6\n\n\n\"    Withdrew Consent\"\n9\n10\n8\n10.5\n11.9\n9.5",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-6-combine-all-results",
+    "href": "analysis/tlf-01-disposition.html#step-6-combine-all-results",
+    "title": "1  Disposition of participants",
+    "section": "1.6 Step 6: Combine All Results",
+    "text": "1.6 Step 6: Combine All Results\nNow we stack all our individual summaries together to create the complete disposition table.\nUsing pl.concat(), we combine the enrollment counts, completion counts, discontinuation counts, and detailed discontinuation reasons into a single table that flows logically from top to bottom.\n\ntbl_disp = pl.concat([\n    n_rand,\n    n_complete,\n    n_disc,\n    n_reason\n])\n\ntbl_disp\n\n\nshape: (12, 7)\n\n\n\nrow\nn_0\nn_54\nn_81\npct_0\npct_54\npct_81\n\n\nstr\nu32\nu32\nu32\nf64\nf64\nf64\n\n\n\n\n\"Participants in population\"\n86\n84\n84\nnull\nnull\nnull\n\n\n\"Completed\"\n58\n25\n27\n67.4\n29.8\n32.1\n\n\n\"Discontinued\"\n28\n59\n57\n32.6\n70.2\n67.9\n\n\n…\n…\n…\n…\n…\n…\n…\n\n\n\"    Sponsor Decision\"\n2\n2\n3\n2.3\n2.4\n3.6\n\n\n\"    Withdrew Consent\"\n9\n10\n8\n10.5\n11.9\n9.5",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-01-disposition.html#step-7-generate-publication-ready-output",
+    "href": "analysis/tlf-01-disposition.html#step-7-generate-publication-ready-output",
+    "title": "1  Disposition of participants",
+    "section": "1.7 Step 7: Generate Publication-Ready Output",
+    "text": "1.7 Step 7: Generate Publication-Ready Output\nFinally, we format our table in RTF format using the rtflite package.\nThe RTFDocument class handles the complex formatting required for clinical reports, including proper column headers, borders, and spacing. The resulting RTF file can be directly included in regulatory submissions or converted to PDF for review.\n\ndoc_disp = rtf.RTFDocument(\n    df=tbl_disp.select(\"row\", \"n_0\", \"pct_0\", \"n_54\", \"pct_54\", \"n_81\", \"pct_81\"),\n    rtf_title=rtf.RTFTitle(text=[\"Disposition of Participants\"]),\n    rtf_column_header=[\n        rtf.RTFColumnHeader(\n            text=[\"\", \"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"],\n            col_rel_width=[3] + [2] * 3,\n            text_justification=[\"l\"] + [\"c\"] * 3,\n        ),\n        rtf.RTFColumnHeader(\n            text=[\"\", \"n\", \"(%)\", \"n\", \"(%)\", \"n\", \"(%)\"],\n            col_rel_width=[3] + [1] * 6,\n            text_justification=[\"l\"] + [\"c\"] * 6,\n            border_top=[\"\"] + [\"single\"] * 6,\n            border_left=[\"single\"] + [\"single\", \"\"] * 3\n        )\n    ],\n    rtf_body=rtf.RTFBody(\n        col_rel_width=[3] + [1] * 6,\n        text_justification=[\"l\"] + [\"c\"] * 6,\n        border_left=[\"single\"] + [\"single\", \"\"] * 3\n    ),\n    rtf_source=rtf.RTFSource(text=[\"Source: ADSL dataset\"]) # Required source attribution\n)\n\ndoc_disp.write_rtf(project_root / \"output\" / \"tlf_disposition.rtf\")\n\n/home/runner/work/demo_py_esub/demo_py_esub/output/tlf_disposition.rtf",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Disposition of participants</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-02-population.html",
+    "href": "analysis/tlf-02-population.html",
+    "title": "2  Study population",
+    "section": "",
+    "text": "2.1 Step 1: Load Data\nWe start by loading the Subject-level Analysis Dataset (ADSL), which contains population flags for each participant.\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nLet’s examine the key population flag variables we’ll use:\nadsl.select([\"USUBJID\", \"TRT01P\", \"ITTFL\", \"EFFFL\", \"SAFFL\"])\n\n\nshape: (254, 5)\n\n\n\nUSUBJID\nTRT01P\nITTFL\nEFFFL\nSAFFL\n\n\nstr\nstr\nstr\nstr\nstr\n\n\n\n\n\"01-701-1015\"\n\"Placebo\"\n\"Y\"\n\"Y\"\n\"Y\"\n\n\n\"01-701-1023\"\n\"Placebo\"\n\"Y\"\n\"Y\"\n\"Y\"\n\n\n\"01-701-1028\"\n\"Xanomeline High Dose\"\n\"Y\"\n\"Y\"\n\"Y\"\n\n\n…\n…\n…\n…\n…\n\n\n\"01-718-1371\"\n\"Xanomeline High Dose\"\n\"Y\"\n\"Y\"\n\"Y\"\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n\"Y\"\n\"Y\"\n\"Y\"",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-02-population.html#step-1-load-data",
+    "href": "analysis/tlf-02-population.html#step-1-load-data",
+    "title": "2  Study population",
+    "section": "",
+    "text": "USUBJID: Unique participant identifier\nTRT01P: Planned treatment group\nITTFL: Intent-to-treat population flag (Y/N)\nEFFFL: Efficacy population flag (Y/N)\nSAFFL: Safety population flag (Y/N)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-02-population.html#step-2-create-population-summary",
+    "href": "analysis/tlf-02-population.html#step-2-create-population-summary",
+    "title": "2  Study population",
+    "section": "2.2 Step 2: Create Population Summary",
+    "text": "2.2 Step 2: Create Population Summary\nUsing the demo001 package, we create a comprehensive population summary with all standard analysis populations.\n\n# Calculate treatment group totals\ntotals = adsl.group_by(\"TRT01P\").agg(total=pl.len())\ntotals\n\n\nshape: (3, 2)\n\n\n\nTRT01P\ntotal\n\n\nstr\nu32\n\n\n\n\n\"Placebo\"\n86\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\n\n\n\n\n# Create population summary using demo001 functions\npop_summary = create_population_summary(adsl)\npop_summary\n\n\nshape: (12, 3)\n\n\n\nTRT01P\nn\npopulation\n\n\nstr\nu32\nstr\n\n\n\n\n\"Placebo\"\n86\n\"Participants in population\"\n\n\n\"Xanomeline Low Dose\"\n84\n\"Participants in population\"\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants in population\"\n\n\n…\n…\n…\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants included in safet…\n\n\n\"Placebo\"\n86\n\"Participants included in safet…",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-02-population.html#step-3-format-population-table",
+    "href": "analysis/tlf-02-population.html#step-3-format-population-table",
+    "title": "2  Study population",
+    "section": "2.3 Step 3: Format Population Table",
+    "text": "2.3 Step 3: Format Population Table\nWe format the population summary with percentages for regulatory reporting.\n\n# Format the population table with percentages\ndf_overview = format_population_table(pop_summary, totals)\ndf_overview = df_overview.select(\n    [\"population\", \"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]\n)\n\ndf_overview\n\n\nshape: (4, 4)\n\n\n\npopulation\nPlacebo\nXanomeline Low Dose\nXanomeline High Dose\n\n\nstr\nstr\nstr\nstr\n\n\n\n\n\"Participants in population\"\n\"86\"\n\"84\"\n\"84\"\n\n\n\"Participants included in ITT p…\n\"86 (100.0)\"\n\"84 (100.0)\"\n\"84 (100.0)\"\n\n\n\"Participants included in effic…\n\"79 (91.9)\"\n\"81 (96.4)\"\n\"74 (88.1)\"\n\n\n\"Participants included in safet…\n\"86 (100.0)\"\n\"84 (100.0)\"\n\"84 (100.0)\"",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-02-population.html#step-4-generate-publication-ready-output",
+    "href": "analysis/tlf-02-population.html#step-4-generate-publication-ready-output",
+    "title": "2  Study population",
+    "section": "2.4 Step 4: Generate Publication-Ready Output",
+    "text": "2.4 Step 4: Generate Publication-Ready Output\nFinally, we format the population table for regulatory submission using the rtflite package.\n\ndoc_overview = rtf.RTFDocument(\n    df=df_overview,\n    rtf_title=rtf.RTFTitle(\n        text=[\"Analysis Population\", \"All Participants Randomized\"]\n    ),\n    rtf_column_header=rtf.RTFColumnHeader(\n        text=[\"\", \"Placebo\\nn (%)\", \"Xanomeline Low Dose\\nn (%)\", \"Xanomeline High Dose\\nn (%)\"],\n        col_rel_width=[4, 2, 2, 2],\n        text_justification=[\"l\", \"c\", \"c\", \"c\"],\n    ),\n    rtf_body=rtf.RTFBody(\n        col_rel_width=[4, 2, 2, 2],\n        text_justification=[\"l\", \"c\", \"c\", \"c\"],\n    ),\n    rtf_source=rtf.RTFSource(text=[\"Source: ADSL dataset\"])\n)\n\ndoc_overview.write_rtf(project_root / \"output\" / \"tlf_population.rtf\")\n\n/home/runner/work/demo_py_esub/demo_py_esub/output/tlf_population.rtf",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-03-baseline.html",
+    "href": "analysis/tlf-03-baseline.html",
+    "title": "3  Baseline characteristics",
+    "section": "",
+    "text": "3.1 Step 1: Load Data\nWe start by loading the Subject-level Analysis Dataset (ADSL) and filtering to the safety population.\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = (\n    load_adam_dataset(\"adsl\", project_root)\n    .select([\"USUBJID\", \"TRT01P\", \"AGE\", \"SEX\", \"RACE\"])\n)\n\nadsl\n\n\nshape: (254, 5)\n\n\n\nUSUBJID\nTRT01P\nAGE\nSEX\nRACE\n\n\nstr\nstr\nf64\nstr\nstr\n\n\n\n\n\"01-701-1015\"\n\"Placebo\"\n63.0\n\"Female\"\n\"White\"\n\n\n\"01-701-1023\"\n\"Placebo\"\n64.0\n\"Male\"\n\"White\"\n\n\n\"01-701-1028\"\n\"Xanomeline High Dose\"\n71.0\n\"Male\"\n\"White\"\n\n\n…\n…\n…\n…\n…\n\n\n\"01-718-1371\"\n\"Xanomeline High Dose\"\n69.0\n\"Female\"\n\"White\"\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n74.0\n\"Female\"\n\"Black Or African American\"",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Baseline characteristics</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-03-baseline.html#step-2-create-baseline-characteristics-table",
+    "href": "analysis/tlf-03-baseline.html#step-2-create-baseline-characteristics-table",
+    "title": "3  Baseline characteristics",
+    "section": "3.2 Step 2: Create Baseline Characteristics Table",
+    "text": "3.2 Step 2: Create Baseline Characteristics Table\nUsing the demo001 package, we create a comprehensive baseline characteristics table with both continuous and categorical variables.\n\n# Define variables to include in baseline table\ncontinuous_vars = [\"AGE\"]\ncategorical_vars = [\"SEX\", \"RACE\"]\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]\n\n# Create baseline table using demo001 functions\nbaseline_table = create_baseline_table(\n    adsl=adsl,\n    continuous_vars=continuous_vars,\n    categorical_vars=categorical_vars,\n    treatments=treatments\n)\n\nbaseline_table\n\n\nshape: (10, 4)\n\n\n\nCharacteristic\nPlacebo\nXanomeline Low Dose\nXanomeline High Dose\n\n\nstr\nstr\nstr\nstr\n\n\n\n\n\"Age (years)\"\n\"\"\n\"\"\n\"\"\n\n\n\"  Mean (SD)\"\n\"75.2 (8.59)\"\n\"75.7 (8.29)\"\n\"74.4 (7.89)\"\n\n\n\"  Median [Min, Max]\"\n\"76.0 [52.0, 89.0]\"\n\"77.5 [51.0, 88.0]\"\n\"76.0 [56.0, 88.0]\"\n\n\n…\n…\n…\n…\n\n\n\"  Black Or African American\"\n\"8 (9.3%)\"\n\"6 (7.1%)\"\n\"9 (10.7%)\"\n\n\n\"  American Indian Or Alaska Na…\n\"0 (0.0%)\"\n\"0 (0.0%)\"\n\"1 (1.2%)\"",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Baseline characteristics</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-03-baseline.html#step-3-generate-publication-ready-output",
+    "href": "analysis/tlf-03-baseline.html#step-3-generate-publication-ready-output",
+    "title": "3  Baseline characteristics",
+    "section": "3.3 Step 3: Generate Publication-Ready Output",
+    "text": "3.3 Step 3: Generate Publication-Ready Output\nFinally, we format the baseline table for regulatory submission using the rtflite package.\n\n# Get treatment group sizes for column headers\ntreatment_n = adsl.group_by(\"TRT01P\").len().sort(\"TRT01P\")\nn_placebo = treatment_n.filter(pl.col(\"TRT01P\") == \"Placebo\")[\"len\"][0]\nn_low = treatment_n.filter(pl.col(\"TRT01P\") == \"Xanomeline Low Dose\")[\"len\"][0]\nn_high = treatment_n.filter(pl.col(\"TRT01P\") == \"Xanomeline High Dose\")[\"len\"][0]\n\ndoc_baseline = rtf.RTFDocument(\n    df=baseline_table,\n    rtf_title=rtf.RTFTitle(\n        text=[\n            \"Baseline Characteristics of Participants\", \n            \"(All Participants Randomized)\"\n        ]\n    ),\n    rtf_column_header=rtf.RTFColumnHeader(\n        text=[\n            \"Characteristic\",\n            f\"Placebo\\n(N={n_placebo})\",\n            f\"Xanomeline Low Dose\\n(N={n_low})\",\n            f\"Xanomeline High Dose\\n(N={n_high})\"\n        ],\n        text_justification=[\"l\", \"c\", \"c\", \"c\"],\n        col_rel_width=[3, 2, 2, 2]\n    ),\n    rtf_body=rtf.RTFBody(\n        text_justification=[\"l\", \"c\", \"c\", \"c\"],\n        col_rel_width=[3, 2, 2, 2]\n    ),\n    rtf_source=rtf.RTFSource(text=[\"Source: ADSL dataset\"])\n)\n\ndoc_baseline.write_rtf(project_root / \"output\" / \"tlf_baseline.rtf\")\n\n/home/runner/work/demo_py_esub/demo_py_esub/output/tlf_baseline.rtf",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Baseline characteristics</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html",
+    "href": "analysis/tlf-04-efficacy-ancova.html",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "",
+    "text": "4.1 Setup\nimport sys\nimport os\n# Add the python-package directory to Python path for demo001 access\nsys.path.insert(0, os.path.join(os.path.dirname(os.getcwd()), 'python-package'))\n\nimport polars as pl\nfrom datetime import datetime\nimport rtflite as rtf\n\n# Import demo001 package functions\nfrom demo001 import find_project_root, load_adam_dataset\nfrom demo001.efficacy import (\n    prepare_locf_data,\n    calculate_descriptive_stats,\n    perform_ancova,\n    format_efficacy_table,\n    format_comparison_table\n)\npolars.config.Config\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadlbc = load_adam_dataset(\"adlbc\", project_root)\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-1-explore-laboratory-data-structure",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-1-explore-laboratory-data-structure",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.2 Step 1: Explore Laboratory Data Structure",
+    "text": "4.2 Step 1: Explore Laboratory Data Structure\nWe start by understanding the glucose data structure and endpoint definitions.\n\n# Display key laboratory variables\n# Key ADLBC variables for efficacy analysis\nlab_vars = adlbc.select([\"USUBJID\", \"PARAMCD\", \"PARAM\", \"AVISIT\", \"AVISITN\", \"AVAL\", \"BASE\", \"CHG\"])\nlab_vars\n\n\nshape: (74_264, 8)\n\n\n\nUSUBJID\nPARAMCD\nPARAM\nAVISIT\nAVISITN\nAVAL\nBASE\nCHG\n\n\nstr\nstr\nstr\nstr\nf64\nf64\nf64\nf64\n\n\n\n\n\"01-701-1015\"\n\"SODIUM\"\n\"Sodium (mmol/L)\"\n\"        Baseline\"\n0.0\n140.0\n140.0\nnull\n\n\n\"01-701-1015\"\n\"K\"\n\"Potassium (mmol/L)\"\n\"        Baseline\"\n0.0\n4.5\n4.5\nnull\n\n\n\"01-701-1015\"\n\"CL\"\n\"Chloride (mmol/L)\"\n\"        Baseline\"\n0.0\n106.0\n106.0\nnull\n\n\n…\n…\n…\n…\n…\n…\n…\n…\n\n\n\"01-718-1427\"\n\"_CK\"\n\"Creatine Kinase (U/L) change f…\n\"          Week 8\"\n8.0\n-0.5\nnull\nnull\n\n\n\"01-718-1427\"\n\"_CK\"\n\"Creatine Kinase (U/L) change f…\n\"End of Treatment\"\n99.0\n-0.5\nnull\nnull\n\n\n\n\n\n\n\n# Focus on glucose parameter\ngluc_visits = adlbc.filter(pl.col(\"PARAMCD\") == \"GLUC\").select(\"AVISIT\", \"AVISITN\").unique().sort(\"AVISITN\")\n# Available glucose measurement visits\ngluc_visits\n\n\nshape: (12, 2)\n\n\n\nAVISIT\nAVISITN\n\n\nstr\nf64\n\n\n\n\n\"               .\"\nnull\n\n\n\"        Baseline\"\n0.0\n\n\n\"          Week 2\"\n2.0\n\n\n…\n…\n\n\n\"         Week 26\"\n26.0\n\n\n\"End of Treatment\"\n99.0",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-2-define-analysis-population-and-endpoint",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-2-define-analysis-population-and-endpoint",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.3 Step 2: Define Analysis Population and Endpoint",
+    "text": "4.3 Step 2: Define Analysis Population and Endpoint\nFollowing the Statistical Analysis Plan, we focus on the efficacy population for the primary endpoint.\n\n# Clean data types and prepare datasets\nadlbc_clean = adlbc.with_columns([\n    pl.col(c).cast(str).str.strip_chars()\n    for c in [\"USUBJID\", \"PARAMCD\", \"AVISIT\", \"TRTP\"]\n])\n\n# Define efficacy population\nadsl_eff = adsl.filter(pl.col(\"EFFFL\") == \"Y\").select([\"USUBJID\"])\n# Efficacy population size\nadsl_eff.height\n\n# Filter laboratory data to efficacy population\nadlbc_eff = adlbc_clean.join(adsl_eff, on=\"USUBJID\", how=\"inner\")\n# Laboratory records in efficacy population\nadlbc_eff.height\n\n71882\n\n\n\n# Examine glucose data availability by visit and treatment\ngluc_availability = (\n    adlbc_eff.filter(pl.col(\"PARAMCD\") == \"GLUC\")\n    .group_by([\"TRTP\", \"AVISIT\"])\n    .agg(n_subjects=pl.col(\"USUBJID\").n_unique())\n    .sort([\"TRTP\", \"AVISIT\"])\n)\n# Glucose data availability by visit\ngluc_availability\n\n\nshape: (36, 3)\n\n\n\nTRTP\nAVISIT\nn_subjects\n\n\nstr\nstr\nu32\n\n\n\n\n\"Placebo\"\n\".\"\n13\n\n\n\"Placebo\"\n\"Baseline\"\n79\n\n\n\"Placebo\"\n\"End of Treatment\"\n79\n\n\n…\n…\n…\n\n\n\"Xanomeline Low Dose\"\n\"Week 6\"\n62\n\n\n\"Xanomeline Low Dose\"\n\"Week 8\"\n59",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-3-implement-locf-imputation-strategy",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-3-implement-locf-imputation-strategy",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.4 Step 3: Implement LOCF Imputation Strategy",
+    "text": "4.4 Step 3: Implement LOCF Imputation Strategy\nWe apply Last Observation Carried Forward (LOCF) for missing Week 24 glucose values using the demo001 efficacy functions.\n\n# Prepare glucose data with LOCF using demo001 function\ngluc_data = prepare_locf_data(\n    adlbc=adlbc_eff,\n    adsl_eff=adsl_eff,\n    param=\"GLUC\",\n    endpoint_week=24\n)\n\n# Subjects with baseline and Week 24 (LOCF) glucose\ngluc_data.height\n# Sample of prepared analysis data\ngluc_data\n\n\nshape: (232, 7)\n\n\n\nUSUBJID\nTRTP\nBASE\nBaseline\nWeek_24_LOCF\nLast_Visit\nCHG\n\n\nstr\nstr\nf64\nf64\nf64\nf64\nf64\n\n\n\n\n\"01-701-1015\"\n\"Placebo\"\n4.71835\n4.71835\n4.49631\n24.0\n-0.22204\n\n\n\"01-701-1023\"\n\"Placebo\"\n5.32896\n5.32896\n5.43998\n4.0\n0.11102\n\n\n\"01-701-1028\"\n\"Xanomeline High Dose\"\n4.77386\n4.77386\n5.43998\n24.0\n0.66612\n\n\n…\n…\n…\n…\n…\n…\n…\n\n\n\"01-718-1371\"\n\"Xanomeline High Dose\"\n6.27263\n6.27263\n5.10692\n12.0\n-1.16571\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n4.55182\n4.55182\n3.71917\n8.0\n-0.83265\n\n\n\n\n\n\n\n# Assess LOCF imputation impact\nlocf_summary = (\n    gluc_data\n    .group_by([\"TRTP\", \"Last_Visit\"])\n    .agg(n_subjects=pl.len())\n    .sort([\"TRTP\", \"Last_Visit\"])\n)\n# LOCF imputation summary (last actual visit used)\nlocf_summary\n\n\nshape: (26, 3)\n\n\n\nTRTP\nLast_Visit\nn_subjects\n\n\nstr\nf64\nu32\n\n\n\n\n\"Placebo\"\n2.0\n2\n\n\n\"Placebo\"\n4.0\n2\n\n\n\"Placebo\"\n6.0\n2\n\n\n…\n…\n…\n\n\n\"Xanomeline Low Dose\"\n20.0\n5\n\n\n\"Xanomeline Low Dose\"\n24.0\n25",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-4-calculate-descriptive-statistics",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-4-calculate-descriptive-statistics",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.5 Step 4: Calculate Descriptive Statistics",
+    "text": "4.5 Step 4: Calculate Descriptive Statistics\nWe compute baseline, Week 24, and change from baseline statistics by treatment group using demo001 functions.\n\n# Calculate comprehensive descriptive statistics using demo001 function\ndesc_stats = calculate_descriptive_stats(gluc_data, treatments)\n\n# Display descriptive statistics\ndesc_df = pl.DataFrame(desc_stats)\n# Descriptive statistics by treatment\ndesc_df\n\n\nshape: (3, 8)\n\n\n\nTreatment\nN_Analysis\nBaseline_Mean\nBaseline_SD\nEndpoint_Mean\nEndpoint_SD\nChange_Mean\nChange_SD\n\n\nstr\ni64\nf64\nf64\nf64\nf64\nf64\nf64\n\n\n\n\n\"Placebo\"\n79\n5.656399\n2.229324\n5.639535\n1.651807\n-0.016864\n2.31841\n\n\n\"Xanomeline Low Dose\"\n79\n5.419603\n0.946102\n5.352148\n1.058004\n-0.067455\n1.015715\n\n\n\"Xanomeline High Dose\"\n74\n5.388971\n1.374893\n5.831551\n2.214668\n0.44258\n1.645179",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-5-perform-ancova-analysis",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-5-perform-ancova-analysis",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.6 Step 5: Perform ANCOVA Analysis",
+    "text": "4.6 Step 5: Perform ANCOVA Analysis\nWe fit the ANCOVA model with treatment and baseline glucose as covariates using demo001 functions.\n\n# Perform ANCOVA analysis using demo001 function\nancova_results = perform_ancova(gluc_data, treatments)\n\n# Extract results\nmodel = ancova_results[\"model\"]\nls_means = ancova_results[\"ls_means\"]\ncomparisons = ancova_results[\"comparisons\"]\n\n# Display model summary\nprint(f\"R-squared: {model.rsquared:.4f}\")\nprint(f\"F-statistic: {model.fvalue:.2f}, p-value: {model.f_pvalue:.4f}\")\n\n# Display LS means\nls_means_df = pl.DataFrame(ls_means)\nls_means_df\n\nR-squared: 0.2552\nF-statistic: 26.04, p-value: 0.0000\n\n\n\nshape: (3, 5)\n\n\n\nTreatment\nLS_Mean\nSE\nCI_Lower\nCI_Upper\n\n\nstr\nf64\nf64\nf64\nf64\n\n\n\n\n\"Placebo\"\n0.071554\n0.171563\n-0.264709\n0.407818\n\n\n\"Xanomeline Low Dose\"\n-0.105215\n0.171308\n-0.440977\n0.230548\n\n\n\"Xanomeline High Dose\"\n0.388498\n0.177055\n0.041471\n0.735525",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-6-pairwise-treatment-comparisons",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-6-pairwise-treatment-comparisons",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.7 Step 6: Pairwise Treatment Comparisons",
+    "text": "4.7 Step 6: Pairwise Treatment Comparisons\nWe calculate treatment differences and their statistical significance (already calculated in the ANCOVA results).\n\n# Display comparison results from ANCOVA\ncomparison_df = pl.DataFrame(comparisons)\ncomparison_df\n\n\nshape: (2, 7)\n\n\n\nComparison\nEstimate\nSE\nCI_Lower\nCI_Upper\nt_stat\np_value\n\n\nstr\nf64\nf64\nf64\nf64\nf64\nf64\n\n\n\n\n\"Xanomeline Low Dose vs. Placeb…\n-0.176769\n0.242635\n-0.654862\n0.301324\n-0.728539\n0.467031\n\n\n\"Xanomeline High Dose vs. Place…\n0.316943\n0.246806\n-0.169369\n0.803256\n1.284179\n0.200383",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-7-prepare-tables-for-rtf-output",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-7-prepare-tables-for-rtf-output",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.8 Step 7: Prepare Tables for RTF Output",
+    "text": "4.8 Step 7: Prepare Tables for RTF Output\nWe format the analysis results into publication-ready tables using demo001 functions.\n\n# Format efficacy table using demo001 function\ntbl1 = format_efficacy_table(desc_stats, ls_means)\ntbl1\n\n\nshape: (3, 8)\n\n\n\nTreatment\nN_Base\nMean_SD_Base\nN_End\nMean_SD_End\nN_Chg\nMean_SD_Chg\nLS_Mean_CI\n\n\nstr\nstr\nstr\nstr\nstr\nstr\nstr\nstr\n\n\n\n\n\"Placebo\"\n\"79\"\n\"5.7 (2.23)\"\n\"79\"\n\"5.6 (1.65)\"\n\"79\"\n\"-0.0 (2.32)\"\n\"0.07 (-0.26, 0.41)\"\n\n\n\"Xanomeline Low Dose\"\n\"79\"\n\"5.4 (0.95)\"\n\"79\"\n\"5.4 (1.06)\"\n\"79\"\n\"-0.1 (1.02)\"\n\"-0.11 (-0.44, 0.23)\"\n\n\n\"Xanomeline High Dose\"\n\"74\"\n\"5.4 (1.37)\"\n\"74\"\n\"5.8 (2.21)\"\n\"74\"\n\"0.4 (1.65)\"\n\"0.39 (0.04, 0.74)\"\n\n\n\n\n\n\n\n# Format comparison table using demo001 function\ntbl2 = format_comparison_table(comparisons)\ntbl2\n\n\nshape: (2, 3)\n\n\n\nComparison\nDiff_CI\nP_Value\n\n\nstr\nstr\nstr\n\n\n\n\n\"Xanomeline Low Dose vs. Placeb…\n\"-0.18 (-0.65, 0.30)\"\n\"0.4670\"\n\n\n\"Xanomeline High Dose vs. Place…\n\"0.32 (-0.17, 0.80)\"\n\"0.2004\"",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-04-efficacy-ancova.html#step-8-create-regulatory-compliant-rtf-document",
+    "href": "analysis/tlf-04-efficacy-ancova.html#step-8-create-regulatory-compliant-rtf-document",
+    "title": "4  ANCOVA efficacy analysis",
+    "section": "4.9 Step 8: Create Regulatory-Compliant RTF Document",
+    "text": "4.9 Step 8: Create Regulatory-Compliant RTF Document\nWe generate a comprehensive efficacy table following regulatory submission standards.\n\n# Create comprehensive RTF document with multiple table sections\ndoc_ancova = rtf.RTFDocument(\n    df=[tbl1, tbl2],\n    rtf_title=rtf.RTFTitle(\n        text=[\n            \"Analysis of Covariance (ANCOVA) of Change from Baseline in\",\n            \"Fasting Glucose (mmol/L) at Week 24 (LOCF)\",\n            \"Efficacy Analysis Population\"\n        ]\n    ),\n    rtf_column_header=[\n        # Header for descriptive statistics table\n        [\n            rtf.RTFColumnHeader(\n                text=[\"\", \"Baseline\", \"Week 24 (LOCF)\", \"Change from Baseline\", \"\"],\n                col_rel_width=[3, 2, 2, 3, 2],\n                text_justification=[\"l\", \"c\", \"c\", \"c\", \"c\"],\n                text_format=\"b\"\n            ),\n            rtf.RTFColumnHeader(\n                text=[\n                    \"Treatment Group\",\n                    \"N\", \"Mean (SD)\",\n                    \"N\", \"Mean (SD)\",\n                    \"N\", \"Mean (SD)\",\n                    \"LS Mean (95% CI){^a}\"\n                ],\n                col_rel_width=[3, 0.7, 1.3, 0.7, 1.3, 0.7, 1.3, 2],\n                text_justification=[\"l\"] + [\"c\"] * 7,\n                border_bottom=\"single\",\n                text_format=\"b\"\n            )\n        ],\n        # Header for pairwise comparisons table\n        [\n            rtf.RTFColumnHeader(\n                text=[\n                    \"Pairwise Comparison\",\n                    \"Difference in LS Mean (95% CI){^a}\",\n                    \"p-Value{^b}\"\n                ],\n                col_rel_width=[5, 4, 2],\n                text_justification=[\"l\", \"c\", \"c\"],\n                text_format=\"b\",\n                border_bottom=\"single\"\n            )\n        ]\n    ],\n    rtf_body=[\n        # Body for descriptive statistics\n        rtf.RTFBody(\n            col_rel_width=[3, 0.7, 1.3, 0.7, 1.3, 0.7, 1.3, 2],\n            text_justification=[\"l\"] + [\"c\"] * 7\n        ),\n        # Body for pairwise comparisons\n        rtf.RTFBody(\n            col_rel_width=[5, 4, 2],\n            text_justification=[\"l\", \"c\", \"c\"]\n        )\n    ],\n    rtf_footnote=rtf.RTFFootnote(\n        text=[\n            \"{^a}LS means and differences in LS means are based on an ANCOVA model with treatment and baseline glucose as covariates.\",\n            f\"{{^b}}p-values are from the ANCOVA model testing treatment effects (overall F-test p-value: {model.f_pvalue:.4f}).\",\n            \"LOCF (Last Observation Carried Forward) approach is used for missing Week 24 values.\",\n            \"ANCOVA = Analysis of Covariance; CI = Confidence Interval; LS = Least Squares; SD = Standard Deviation\"\n        ]\n    ),\n    rtf_source=rtf.RTFSource(\n        text=[\n            \"Source: ADLBC Analysis Dataset\",\n            f\"Analysis conducted: {datetime.now().strftime('%d%b%Y').upper()}\",\n            \"Statistical software: Python (statsmodels)\"\n        ]\n    )\n)\n\n# Generate RTF file\ndoc_ancova.write_rtf(project_root / \"output\" / \"tlf_efficacy_ancova.rtf\")\n\n/home/runner/work/demo_py_esub/demo_py_esub/output/tlf_efficacy_ancova.rtf",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html",
+    "href": "analysis/tlf-05-ae-summary.html",
+    "title": "5  Adverse events summary",
+    "section": "",
+    "text": "5.1 Step 1: Load Data\nWe need two datasets for AE analysis: the subject-level dataset (ADSL) and the adverse events dataset (ADAE).\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadae = load_adam_dataset(\"adae\", project_root)\n\n# Display key variables from ADSL\nadsl.select([\"USUBJID\", \"TRT01A\", \"SAFFL\"])\n\n\nshape: (254, 3)\n\n\n\nUSUBJID\nTRT01A\nSAFFL\n\n\nstr\nstr\nstr\n\n\n\n\n\"01-701-1015\"\n\"Placebo\"\n\"Y\"\n\n\n\"01-701-1023\"\n\"Placebo\"\n\"Y\"\n\n\n\"01-701-1028\"\n\"Xanomeline High Dose\"\n\"Y\"\n\n\n…\n…\n…\n\n\n\"01-718-1371\"\n\"Xanomeline High Dose\"\n\"Y\"\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n\"Y\"\n# Display key variables from ADAE\nadae.select([\"USUBJID\", \"AEREL\", \"AESER\", \"AEOUT\", \"AEACN\"])\n\n\nshape: (1_191, 5)\n\n\n\nUSUBJID\nAEREL\nAESER\nAEOUT\nAEACN\n\n\nstr\nstr\nstr\nstr\nstr\n\n\n\n\n\"01-701-1015\"\n\"PROBABLE\"\n\"N\"\n\"NOT RECOVERED/NOT RESOLVED\"\n\"\"\n\n\n\"01-701-1015\"\n\"PROBABLE\"\n\"N\"\n\"NOT RECOVERED/NOT RESOLVED\"\n\"\"\n\n\n\"01-701-1015\"\n\"REMOTE\"\n\"N\"\n\"RECOVERED/RESOLVED\"\n\"\"\n\n\n…\n…\n…\n…\n…\n\n\n\"01-718-1427\"\n\"POSSIBLE\"\n\"N\"\n\"RECOVERED/RESOLVED\"\n\"\"\n\n\n\"01-718-1427\"\n\"POSSIBLE\"\n\"N\"\n\"RECOVERED/RESOLVED\"\n\"\"\nKey ADAE variables used in this analysis:",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html#step-1-load-data",
+    "href": "analysis/tlf-05-ae-summary.html#step-1-load-data",
+    "title": "5  Adverse events summary",
+    "section": "",
+    "text": "USUBJID: Unique subject identifier to link with ADSL\nAEREL: Relationship of adverse event to study drug (e.g., “RELATED”, “POSSIBLE”, “PROBABLE”, “DEFINITE”, “NOT RELATED”)\nAESER: Serious adverse event flag (“Y” = serious, “N” = not serious)\nAEOUT: Outcome of adverse event (e.g., “RECOVERED”, “RECOVERING”, “NOT RECOVERED”, “FATAL”)\nAEACN: Action taken with study treatment (e.g., “DOSE NOT CHANGED”, “DRUG WITHDRAWN”, “DOSE REDUCED”)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html#step-2-filter-safety-population",
+    "href": "analysis/tlf-05-ae-summary.html#step-2-filter-safety-population",
+    "title": "5  Adverse events summary",
+    "section": "5.2 Step 2: Filter Safety Population",
+    "text": "5.2 Step 2: Filter Safety Population\nFor safety analyses, we focus on participants who received at least one dose of study treatment.\n\n# Filter to safety population\nadsl_safety = adsl.filter(pl.col(\"SAFFL\") == \"Y\").select([\"USUBJID\", \"TRT01A\"])\n\n# Get treatment counts for denominators\npop_counts = adsl_safety.group_by(\"TRT01A\").agg(\n    N = pl.len()\n).sort(\"TRT01A\")\n\n# Preserve the treatment level order for downstream joins\ntreatment_levels = pop_counts.select([\"TRT01A\"])\n\n# Safety population by treatment\npop_counts\n\n\nshape: (3, 2)\n\n\n\nTRT01A\nN\n\n\nstr\nu32\n\n\n\n\n\"Placebo\"\n86\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\n\n\n\n\n# Join treatment information to AE data\nadae_safety = adae.join(adsl_safety, on=\"USUBJID\")\n\n# Total AE records in safety population\nadae_safety.height\n\n1191",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html#step-3-define-ae-categories",
+    "href": "analysis/tlf-05-ae-summary.html#step-3-define-ae-categories",
+    "title": "5  Adverse events summary",
+    "section": "5.3 Step 3: Define AE Categories",
+    "text": "5.3 Step 3: Define AE Categories\nWe’ll calculate participant counts for standard AE categories used in regulatory submissions.\n\n# Create AE summary using demo001 safety functions\nae_summary = create_ae_summary(adae_safety, pop_counts, treatment_levels)\n\n# Display the raw summary\nae_summary.sort([\"category\", \"TRT01A\"])\n\n\nshape: (21, 3)\n\n\n\nTRT01A\nn\ncategory\n\n\nstr\nu32\nstr\n\n\n\n\n\"Placebo\"\n0\n\"Discontinued due to adverse ev…\n\n\n\"Xanomeline High Dose\"\n0\n\"Discontinued due to adverse ev…\n\n\n\"Xanomeline Low Dose\"\n0\n\"Discontinued due to adverse ev…\n\n\n…\n…\n…\n\n\n\"Xanomeline High Dose\"\n1\n\"With serious drug-related adve…\n\n\n\"Xanomeline Low Dose\"\n1\n\"With serious drug-related adve…",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html#step-4-format-for-display",
+    "href": "analysis/tlf-05-ae-summary.html#step-4-format-for-display",
+    "title": "5  Adverse events summary",
+    "section": "5.4 Step 4: Format for Display",
+    "text": "5.4 Step 4: Format for Display\nWe format the AE summary with percentages for the final table display.\n\n# Format the AE summary using demo001 safety functions\nae_formatted = format_ae_summary(ae_summary, pop_counts)\n\nae_formatted.select([\"category\", \"TRT01A\", \"n_display\", \"pct_display\"])\n\n\nshape: (21, 4)\n\n\n\ncategory\nTRT01A\nn_display\npct_display\n\n\nstr\nstr\nstr\nstr\n\n\n\n\n\"Participants in population\"\n\"Placebo\"\n\"86\"\n\"\"\n\n\n\"Participants in population\"\n\"Xanomeline High Dose\"\n\"84\"\n\"\"\n\n\n\"Participants in population\"\n\"Xanomeline Low Dose\"\n\"84\"\n\"\"\n\n\n…\n…\n…\n…\n\n\n\"Discontinued due to adverse ev…\n\"Xanomeline High Dose\"\n\"0\"\n\"(0.0)\"\n\n\n\"Discontinued due to adverse ev…\n\"Xanomeline Low Dose\"\n\"0\"\n\"(0.0)\"",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html#step-5-create-final-table-structure",
+    "href": "analysis/tlf-05-ae-summary.html#step-5-create-final-table-structure",
+    "title": "5  Adverse events summary",
+    "section": "5.5 Step 5: Create Final Table Structure",
+    "text": "5.5 Step 5: Create Final Table Structure\nWe reshape the data to create the final table with treatments as columns.\n\n# Define category order for consistent display\ncategory_order = [\n    \"Participants in population\",\n    \"With any adverse event\",\n    \"With drug-related adverse event\",\n    \"With serious adverse event\",\n    \"With serious drug-related adverse event\",\n    \"Who died\",\n    \"Discontinued due to adverse event\"\n]\n\n# Pivot to wide format\nae_wide = ae_formatted.pivot(\n    values=[\"n_display\", \"pct_display\"],\n    index=\"category\",\n    on=\"TRT01A\",\n    maintain_order=True\n)\n\n# Reorder columns for each treatment group\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]\ncolumn_order = [\"category\"]\nfor trt in treatments:\n    column_order.extend([f\"n_display_{trt}\", f\"pct_display_{trt}\"])\n\n# Create final table with proper column order\nfinal_table = ae_wide.select(column_order).sort(\n    pl.col(\"category\").cast(pl.Enum(category_order))\n)\n\nfinal_table\n\n\nshape: (7, 7)\n\n\n\ncategory\nn_display_Placebo\npct_display_Placebo\nn_display_Xanomeline Low Dose\npct_display_Xanomeline Low Dose\nn_display_Xanomeline High Dose\npct_display_Xanomeline High Dose\n\n\nstr\nstr\nstr\nstr\nstr\nstr\nstr\n\n\n\n\n\"Participants in population\"\n\"86\"\n\"\"\n\"84\"\n\"\"\n\"84\"\n\"\"\n\n\n\"With any adverse event\"\n\"69\"\n\"(80.2)\"\n\"77\"\n\"(91.7)\"\n\"79\"\n\"(94.0)\"\n\n\n\"With drug-related adverse even…\n\"44\"\n\"(51.2)\"\n\"73\"\n\"(86.9)\"\n\"70\"\n\"(83.3)\"\n\n\n…\n…\n…\n…\n…\n…\n…\n\n\n\"Who died\"\n\"2\"\n\"(2.3)\"\n\"1\"\n\"(1.2)\"\n\"0\"\n\"(0.0)\"\n\n\n\"Discontinued due to adverse ev…\n\"0\"\n\"(0.0)\"\n\"0\"\n\"(0.0)\"\n\"0\"\n\"(0.0)\"",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-05-ae-summary.html#step-7-generate-publication-ready-output",
+    "href": "analysis/tlf-05-ae-summary.html#step-7-generate-publication-ready-output",
+    "title": "5  Adverse events summary",
+    "section": "5.6 Step 7: Generate Publication-Ready Output",
+    "text": "5.6 Step 7: Generate Publication-Ready Output\nFinally, we format the AE summary table for regulatory submission using the rtflite package.\n\n# Get population sizes for column headers\nn_placebo = pop_counts.filter(pl.col(\"TRT01A\") == \"Placebo\")[\"N\"][0]\nn_low = pop_counts.filter(pl.col(\"TRT01A\") == \"Xanomeline Low Dose\")[\"N\"][0]\nn_high = pop_counts.filter(pl.col(\"TRT01A\") == \"Xanomeline High Dose\")[\"N\"][0]\n\ndoc_ae_summary = rtf.RTFDocument(\n    df=final_table.rename({\"category\": \"\"}),\n    rtf_title=rtf.RTFTitle(\n        text=[\n            \"Analysis of Adverse Event Summary\",\n            \"(Safety Analysis Population)\"\n        ]\n    ),\n    rtf_column_header=[\n        rtf.RTFColumnHeader(\n            text = [\n                \"\",\n                \"Placebo\",\n                \"Xanomeline Low Dose\",\n                \"Xanomeline High Dose\"\n            ],\n            col_rel_width=[4, 2, 2, 2],\n            text_justification=[\"l\", \"c\", \"c\", \"c\"],\n        ),\n        rtf.RTFColumnHeader(\n            text=[\n                \"\",          # Empty for first column\n                \"n\", \"(%)\",  # Placebo columns\n                \"n\", \"(%)\",  # Low Dose columns\n                \"n\", \"(%)\"   # High Dose columns\n            ],\n            col_rel_width=[4] + [1] * 6,\n            text_justification=[\"l\"] + [\"c\"] * 6,\n            border_left = [\"single\"] + [\"single\", \"\"] * 3,\n            border_top = [\"\"] + [\"single\"] * 6\n        )\n    ],\n    rtf_body=rtf.RTFBody(\n        col_rel_width=[4] + [1] * 6,\n        text_justification=[\"l\"] + [\"c\"] * 6,\n        border_left = [\"single\"] + [\"single\", \"\"] * 3\n    ),\n    rtf_footnote=rtf.RTFFootnote(\n        text=[\n            \"Every subject is counted a single time for each applicable row and column.\"\n        ]\n    ),\n    rtf_source=rtf.RTFSource(\n        text=[\"Source: ADSL and ADAE datasets\"]\n    )\n)\n\ndoc_ae_summary.write_rtf(project_root / \"output\" / \"tlf_ae_summary.rtf\")\n\n/home/runner/work/demo_py_esub/demo_py_esub/output/tlf_ae_summary.rtf",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adverse events summary</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-06-specific.html",
+    "href": "analysis/tlf-06-specific.html",
+    "title": "6  Specific adverse events",
+    "section": "",
+    "text": "6.1 Setup\nimport sys\nimport os\n# Add the python-package directory to Python path for demo001 access\nsys.path.insert(0, os.path.join(os.path.dirname(os.getcwd()), 'python-package'))\n\nimport polars as pl\nimport rtflite as rtf\n\n# Import demo001 package functions\nfrom demo001 import find_project_root, load_adam_dataset\nfrom demo001.safety import create_ae_by_soc_table\npolars.config.Config\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadae = load_adam_dataset(\"adae\", project_root)\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Specific adverse events</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-06-specific.html#step-1-load-and-explore-data",
+    "href": "analysis/tlf-06-specific.html#step-1-load-and-explore-data",
+    "title": "6  Specific adverse events",
+    "section": "6.2 Step 1: Load and Explore Data",
+    "text": "6.2 Step 1: Load and Explore Data\nWe start by examining the adverse events data structure and understanding the MedDRA hierarchy.\n\n# Display key variables in ADAE dataset\nadae_vars = adae.select([\"USUBJID\", \"TRTA\", \"AEBODSYS\", \"AEDECOD\", \"AESEV\", \"AESER\"])\n# Key ADAE variables\nadae_vars\n\n\nshape: (1_191, 6)\n\n\n\nUSUBJID\nTRTA\nAEBODSYS\nAEDECOD\nAESEV\nAESER\n\n\nstr\nstr\nstr\nstr\nstr\nstr\n\n\n\n\n\"01-701-1015\"\n\"Placebo\"\n\"GENERAL DISORDERS AND ADMINIST…\n\"APPLICATION SITE ERYTHEMA\"\n\"MILD\"\n\"N\"\n\n\n\"01-701-1015\"\n\"Placebo\"\n\"GENERAL DISORDERS AND ADMINIST…\n\"APPLICATION SITE PRURITUS\"\n\"MILD\"\n\"N\"\n\n\n\"01-701-1015\"\n\"Placebo\"\n\"GASTROINTESTINAL DISORDERS\"\n\"DIARRHOEA\"\n\"MILD\"\n\"N\"\n\n\n…\n…\n…\n…\n…\n…\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n\"METABOLISM AND NUTRITION DISOR…\n\"DECREASED APPETITE\"\n\"MODERATE\"\n\"N\"\n\n\n\"01-718-1427\"\n\"Xanomeline High Dose\"\n\"GASTROINTESTINAL DISORDERS\"\n\"NAUSEA\"\n\"MODERATE\"\n\"N\"\n\n\n\n\n\n\n\n# Examine the MedDRA hierarchy structure\n# System Organ Classes (SOCs) in the data\nsoc_summary = adae.group_by(\"AEBODSYS\").agg(\n    n_participants=pl.col(\"USUBJID\").n_unique(),\n    n_events=pl.len()\n).sort(\"n_participants\", descending=True)\nsoc_summary\n\n\nshape: (23, 3)\n\n\n\nAEBODSYS\nn_participants\nn_events\n\n\nstr\nu32\nu32\n\n\n\n\n\"GENERAL DISORDERS AND ADMINIST…\n108\n292\n\n\n\"SKIN AND SUBCUTANEOUS TISSUE D…\n105\n276\n\n\n\"NERVOUS SYSTEM DISORDERS\"\n59\n101\n\n\n…\n…\n…\n\n\n\"HEPATOBILIARY DISORDERS\"\n1\n1\n\n\n\"SOCIAL CIRCUMSTANCES\"\n1\n1",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Specific adverse events</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-06-specific.html#step-2-prepare-analysis-population",
+    "href": "analysis/tlf-06-specific.html#step-2-prepare-analysis-population",
+    "title": "6  Specific adverse events",
+    "section": "6.3 Step 2: Prepare Analysis Population",
+    "text": "6.3 Step 2: Prepare Analysis Population\nFollowing regulatory standards, we focus on the safety analysis population.\n\n# Define safety population\nadsl_safety = adsl.filter(pl.col(\"SAFFL\") == \"Y\").select([\"USUBJID\", \"TRT01A\"])\n# Safety population size\nadsl_safety.height\n\n# Get safety population counts by treatment\npop_counts = adsl_safety.group_by(\"TRT01A\").agg(N=pl.len()).sort(\"TRT01A\")\n# Safety population by treatment\npop_counts\n\n\nshape: (3, 2)\n\n\n\nTRT01A\nN\n\n\nstr\nu32\n\n\n\n\n\"Placebo\"\n86\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\n\n\n\n\n# Filter adverse events to safety population\nadae_safety = adae.join(adsl_safety, on=\"USUBJID\", how=\"inner\")\n# AE records in safety population\nadae_safety.height\n\n1191",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Specific adverse events</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-06-specific.html#step-3-data-preparation-and-standardization",
+    "href": "analysis/tlf-06-specific.html#step-3-data-preparation-and-standardization",
+    "title": "6  Specific adverse events",
+    "section": "6.4 Step 3: Data Preparation and Standardization",
+    "text": "6.4 Step 3: Data Preparation and Standardization\nWe standardize the adverse event terms and prepare the hierarchical data structure.\n\n# Create hierarchical AE table using demo001 safety functions\ndf_ae_specific = create_ae_by_soc_table(adae_safety, pop_counts, treatments)\n\n# Display the table structure\ndf_ae_specific.shape\ndf_ae_specific\n\n\nshape: (267, 4)\n\n\n\nSystem Organ Class / Preferred Term\nPlacebo\nXanomeline Low Dose\nXanomeline High Dose\n\n\nstr\nstr\nstr\nstr\n\n\n\n\n\"Participants in population\"\n\"86\"\n\"84\"\n\"84\"\n\n\n\"\"\n\"\"\n\"\"\n\"\"\n\n\n\"Cardiac Disorders\"\n\"\"\n\"\"\n\"\"\n\n\n…\n…\n…\n…\n\n\n\"  Orthostatic Hypotension\"\n\"1\"\n\"0\"\n\"0\"\n\n\n\"  Wound Haemorrhage\"\n\"0\"\n\"0\"\n\"1\"",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Specific adverse events</span>"
+    ]
+  },
+  {
+    "objectID": "analysis/tlf-06-specific.html#step-4-create-regulatory-compliant-rtf-output",
+    "href": "analysis/tlf-06-specific.html#step-4-create-regulatory-compliant-rtf-output",
+    "title": "6  Specific adverse events",
+    "section": "6.5 Step 4: Create Regulatory-Compliant RTF Output",
+    "text": "6.5 Step 4: Create Regulatory-Compliant RTF Output\nWe format the table following regulatory submission standards with proper hierarchy and formatting.\n\n# Create comprehensive RTF document\ndoc_ae_specific = rtf.RTFDocument(\n    df=df_ae_specific,\n    rtf_title=rtf.RTFTitle(\n        text=[\n            \"Adverse Events by System Organ Class and Preferred Term\",\n            \"(Safety Analysis Set)\"\n        ]\n    ),\n    rtf_column_header=rtf.RTFColumnHeader(\n        text=[\n            \"System Organ Class\\\\line   Preferred Term\",\n            f\"Placebo\\\\line (N={pop_counts.filter(pl.col('TRT01A') == 'Placebo')['N'][0]})\",\n            f\"Xanomeline Low Dose\\\\line (N={pop_counts.filter(pl.col('TRT01A') == 'Xanomeline Low Dose')['N'][0]})\",\n            f\"Xanomeline High Dose\\\\line (N={pop_counts.filter(pl.col('TRT01A') == 'Xanomeline High Dose')['N'][0]})\"\n        ],\n        col_rel_width=[4, 1.5, 1.5, 1.5],\n        text_justification=[\"l\", \"c\", \"c\", \"c\"],\n        text_format=\"b\",  # Bold headers\n        border_bottom=\"single\"\n    ),\n    rtf_body=rtf.RTFBody(\n        col_rel_width=[4, 1.5, 1.5, 1.5],\n        text_justification=[\"l\", \"c\", \"c\", \"c\"],\n        # Apply bold formatting to SOC headers (rows without indentation)\n        text_font_style=lambda df, i, j: \"b\" if j == 0 and not str(df[i, j]).startswith(\"  \") and str(df[i, j]) != \"\" else \"\"\n    ),\n    rtf_footnote=rtf.RTFFootnote(\n        text=[\n            \"MedDRA version 25.0.\",\n            \"Each participant is counted once within each preferred term and system organ class.\",\n            \"Participants with multiple events in the same preferred term are counted only once for that term.\"\n        ]\n    ),\n    rtf_source=rtf.RTFSource(\n        text=[\"Source: ADAE Analysis Dataset (Data cutoff: 01JAN2023)\"]\n    )\n)\n\n# Generate RTF file\ndoc_ae_specific.write_rtf(project_root / \"output\" / \"tlf_ae_specific.rtf\")\n# RTF file created: rtf/tlf_ae_specific.rtf\n\n/home/runner/work/demo_py_esub/demo_py_esub/output/tlf_ae_specific.rtf",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Specific adverse events</span>"
+    ]
+  }
+]
