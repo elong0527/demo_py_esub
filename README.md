@@ -15,6 +15,65 @@ By using the recommended folder structure and associated development tools, this
 - **Reproducibility**: Isolated environment management with uv
 - **Compliance**: Best practices for regulatory submissions
 
+## Folder Structure
+
+This project follows a standardized folder structure for clinical study reports and regulatory submissions:
+
+### Minimal Sufficient Folders and Files
+
+- `pyproject.toml`: Python project metadata and dependencies
+- `uv.lock`: Lock file for reproducible environments
+- `_quarto.yml`: Quarto book configuration
+- `index.qmd`: Book homepage
+- `analysis/`: Analysis scripts using Quarto Markdown
+- `data/`: ADaM datasets in Parquet format
+- `output/`: Generated tables, listings, and figures (TLF)
+
+### Additional Folders and Files
+
+- `.venv/`: Virtual environment (created by uv)
+- `.python-version`: Python version specification
+- `python-package/`: Project-specific Python functions
+- `_book/`: Rendered Quarto book output
+- `.gitignore`: Git ignore patterns
+
+### Project Structure
+
+```
+demo-py-esub/
+├── pyproject.toml           # Project configuration and dependencies
+├── uv.lock                  # Dependency lock file
+├── _quarto.yml             # Quarto book configuration
+├── index.qmd               # Book homepage
+├── analysis/               # Analysis scripts
+│   ├── tlf-01-disposition.qmd
+│   ├── tlf-02-population.qmd
+│   ├── tlf-03-baseline.qmd
+│   ├── tlf-04-efficacy-ancova.qmd
+│   ├── tlf-05-ae-summary.qmd
+│   └── tlf-06-specific.qmd
+├── data/                   # ADaM datasets
+│   ├── adsl.parquet
+│   ├── adae.parquet
+│   └── adlbc.parquet
+├── output/                 # Generated TLF outputs
+└── python-package/         # Project-specific functions
+```
+
+### Key Goals of This Structure
+
+- **Consistency**: Standardized organization across projects
+- **Automation**: Seamless integration with CI/CD pipelines
+- **Reproducibility**: Isolated environments and locked dependencies
+- **Compliance**: Follows regulatory submission best practices
+
+## Usage
+
+Run the analysis in batch mode:
+```bash
+quarto render
+```
+
 ## Requirements
 
 - Python 3.14.0
@@ -42,7 +101,3 @@ By using the recommended folder structure and associated development tools, this
 + Activate the virtual environment:
    - **Windows**: `.venv\Scripts\activate`
    - **macOS/Linux**: `source .venv/bin/activate`
-
-## Project 
-
-+ Run in batch `quarto render`
