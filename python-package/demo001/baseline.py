@@ -188,7 +188,8 @@ def create_baseline_table(
         var_formatted = format_continuous_stats(var_stats)
 
         # Add variable header
-        table_rows.append([var.title(), "", "", ""])
+        label = f"{var.title()} (years)" if var == "AGE" else var.title()
+        table_rows.append([label, "", "", ""])
 
         # Add mean (SD) row
         mean_row = ["  Mean (SD)"] + [
@@ -217,7 +218,12 @@ def create_baseline_table(
         table_rows.append([var.title(), "", "", ""])
 
         # Add category rows
-        for category in var_formatted[var].unique().sort():
+        # Get categories from the original adsl data to preserve order
+        categories = adsl[var].unique(maintain_order=True).drop_nulls().to_list()
+
+        for category in categories:
+            if category not in var_formatted[var].unique().to_list():
+                continue
             cat_data = var_formatted.filter(pl.col(var) == category)
             cat_row = [f"  {category}"] + [
                 get_value(cat_data, trt) for trt in treatments

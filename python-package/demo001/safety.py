@@ -10,7 +10,7 @@ import polars as pl
 
 
 def count_participants(
-    df: pl.DataFrame, condition: pl.Expr | None = None
+    df: pl.DataFrame, treatment_levels: pl.DataFrame, condition: pl.Expr | None = None
 ) -> pl.DataFrame:
     """
     Count unique participants meeting a condition.
@@ -22,6 +22,8 @@ def count_participants(
     -----------
     df : pl.DataFrame
         DataFrame with adverse events data
+    treatment_levels : pl.DataFrame
+        DataFrame with treatment levels to ensure all levels are present.
     condition : pl.Expr, optional
         Polars expression for filtering (None = count all participants)
 
@@ -33,19 +35,23 @@ def count_participants(
     Examples:
     ---------
     >>> # Count participants with any AE
-    >>> count_participants(adae_safety)
+    >>> count_participants(adae_safety, treatment_levels)
 
     >>> # Count participants with serious AEs
-    >>> count_participants(adae_safety, pl.col("AESER") == "Y")
+    >>> count_participants(adae_safety, treatment_levels, pl.col("AESER") == "Y")
 
     >>> # Count participants with drug-related AEs
-    >>> count_participants(adae_safety,
+    >>> count_participants(adae_safety, treatment_levels,
     ...     pl.col("AEREL").is_in(["POSSIBLE", "PROBABLE", "DEFINITE", "RELATED"]))
     """
     if condition is not None:
         df = df.filter(condition)
 
-    return df.group_by("TRT01A").agg(n=pl.col("USUBJID").n_unique())
+    counts = df.group_by("TRT01A").agg(n=pl.col("USUBJID").n_unique())
+
+    return treatment_levels.join(counts, on="TRT01A", how="left").with_columns(
+        pl.col("n").fill_null(0)
+    )
 
 
 def create_ae_summary(
@@ -85,7 +91,7 @@ def create_ae_summary(
     categories.append(pop_row)
 
     # 2. With any adverse event
-    any_ae = count_participants(adae_safety).with_columns(
+    any_ae = count_participants(adae_safety, treatment_levels).with_columns(
         category=pl.lit("With any adverse event")
     )
     categories.append(any_ae)
@@ -93,33 +99,35 @@ def create_ae_summary(
     # 3. With drug-related adverse event
     drug_related = count_participants(
         adae_safety,
+        treatment_levels,
         pl.col("AEREL").is_in(["POSSIBLE", "PROBABLE", "DEFINITE", "RELATED"]),
     ).with_columns(category=pl.lit("With drug-related adverse event"))
     categories.append(drug_related)
 
     # 4. With serious adverse event
-    serious = count_participants(adae_safety, pl.col("AESER") == "Y").with_columns(
-        category=pl.lit("With serious adverse event")
-    )
+    serious = count_participants(
+        adae_safety, treatment_levels, pl.col("AESER") == "Y"
+    ).with_columns(category=pl.lit("With serious adverse event"))
     categories.append(serious)
 
     # 5. With serious drug-related adverse event
     serious_drug_related = count_participants(
         adae_safety,
+        treatment_levels,
         (pl.col("AESER") == "Y")
         & pl.col("AEREL").is_in(["POSSIBLE", "PROBABLE", "DEFINITE", "RELATED"]),
     ).with_columns(category=pl.lit("With serious drug-related adverse event"))
     categories.append(serious_drug_related)
 
     # 6. Who died
-    deaths = count_participants(adae_safety, pl.col("AEOUT") == "FATAL").with_columns(
-        category=pl.lit("Who died")
-    )
+    deaths = count_participants(
+        adae_safety, treatment_levels, pl.col("AEOUT") == "FATAL"
+    ).with_columns(category=pl.lit("Who died"))
     categories.append(deaths)
 
     # 7. Discontinued due to adverse event
     discontinued = count_participants(
-        adae_safety, pl.col("AEACN") == "DRUG WITHDRAWN"
+        adae_safety, treatment_levels, pl.col("AEACN") == "DRUG WITHDRAWN"
     ).with_columns(category=pl.lit("Discontinued due to adverse event"))
     categories.append(discontinued)
 

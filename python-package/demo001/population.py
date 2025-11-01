@@ -67,19 +67,19 @@ def create_population_summary(adsl: pl.DataFrame) -> pl.DataFrame:
     # Intent-to-treat population
     if "ITTFL" in adsl.columns:
         adsl_itt = adsl.filter(pl.col("ITTFL") == "Y")
-        pop_itt = count_by_treatment(adsl_itt, "Intent-to-treat population")
+        pop_itt = count_by_treatment(adsl_itt, "Participants included in ITT population")
         populations.append(pop_itt)
 
     # Efficacy population
     if "EFFFL" in adsl.columns:
         adsl_eff = adsl.filter(pl.col("EFFFL") == "Y")
-        pop_eff = count_by_treatment(adsl_eff, "Efficacy population")
+        pop_eff = count_by_treatment(adsl_eff, "Participants included in efficacy population")
         populations.append(pop_eff)
 
     # Safety population
     if "SAFFL" in adsl.columns:
         adsl_saf = adsl.filter(pl.col("SAFFL") == "Y")
-        pop_saf = count_by_treatment(adsl_saf, "Safety population")
+        pop_saf = count_by_treatment(adsl_saf, "Participants included in safety population")
         populations.append(pop_saf)
 
     return pl.concat(populations, how="diagonal")
