@@ -3,6 +3,11 @@ title: "Disposition of participants"
 ---
 
 ```{python}
+import sys
+import os
+# Add the python-package directory to Python path for demo001 access
+sys.path.insert(0, os.path.join(os.path.dirname(os.getcwd()), 'python-package'))
+
 import polars as pl # Manipulate data
 import rtflite as rtf # Reporting in RTF format
 
