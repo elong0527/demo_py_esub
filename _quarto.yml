@@ -1,6 +1,8 @@
 project:
   type: book
 
+jupyter: demo-py-esub
+
 book:
   title: "DEMO-001 Analysis Results"
   chapters:
