@@ -174,7 +174,7 @@
     "href": "analysis/tlf-02-population.html#step-2-create-population-summary",
     "title": "2  Study population",
     "section": "2.2 Step 2: Create Population Summary",
-    "text": "2.2 Step 2: Create Population Summary\nUsing the demo001 package, we create a comprehensive population summary with all standard analysis populations.\n\n# Calculate treatment group totals\ntotals = adsl.group_by(\"TRT01P\").agg(total=pl.len())\ntotals\n\n\nshape: (3, 2)\n\n\n\nTRT01P\ntotal\n\n\nstr\nu32\n\n\n\n\n\"Placebo\"\n86\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\n\n\n\n\n# Create population summary using demo001 functions\npop_summary = create_population_summary(adsl)\npop_summary\n\n\nshape: (12, 3)\n\n\n\nTRT01P\nn\npopulation\n\n\nstr\nu32\nstr\n\n\n\n\n\"Xanomeline Low Dose\"\n84\n\"Participants in population\"\n\n\n\"Placebo\"\n86\n\"Participants in population\"\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants in population\"\n\n\n…\n…\n…\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants included in safet…\n\n\n\"Placebo\"\n86\n\"Participants included in safet…",
+    "text": "2.2 Step 2: Create Population Summary\nUsing the demo001 package, we create a comprehensive population summary with all standard analysis populations.\n\n# Calculate treatment group totals\ntotals = adsl.group_by(\"TRT01P\").agg(total=pl.len())\ntotals\n\n\nshape: (3, 2)\n\n\n\nTRT01P\ntotal\n\n\nstr\nu32\n\n\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\"Placebo\"\n86\n\n\n\n\n\n\n\n# Create population summary using demo001 functions\npop_summary = create_population_summary(adsl)\npop_summary\n\n\nshape: (12, 3)\n\n\n\nTRT01P\nn\npopulation\n\n\nstr\nu32\nstr\n\n\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants in population\"\n\n\n\"Xanomeline Low Dose\"\n84\n\"Participants in population\"\n\n\n\"Placebo\"\n86\n\"Participants in population\"\n\n\n…\n…\n…\n\n\n\"Placebo\"\n86\n\"Participants included in safet…\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants included in safet…",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
     ]
@@ -234,7 +234,7 @@
     "href": "analysis/tlf-04-efficacy-ancova.html",
     "title": "4  ANCOVA efficacy analysis",
     "section": "",
-    "text": "4.1 Setup\nimport sys\nimport os\n# Add the python-package directory to Python path for demo001 access\nsys.path.insert(0, os.path.join(os.path.dirname(os.getcwd()), 'python-package'))\n\nimport polars as pl\nfrom datetime import datetime\nimport rtflite as rtf\n\n# Import demo001 package functions\nfrom demo001 import find_project_root, load_adam_dataset\nfrom demo001.efficacy import (\n    prepare_locf_data,\n    calculate_descriptive_stats,\n    perform_ancova,\n    format_efficacy_table,\n    format_comparison_table\n)\npolars.config.Config\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadlbc = load_adam_dataset(\"adlbc\", project_root)\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]",
+    "text": "4.1 Setup\nfrom datetime import datetime\nimport polars as pl\nimport rtflite as rtf\n\nfrom demo001 import find_project_root, load_adam_dataset\nfrom demo001.efficacy import (\n    prepare_locf_data,\n    calculate_descriptive_stats,\n    perform_ancova,\n    format_efficacy_table,\n    format_comparison_table\n)\npolars.config.Config\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadlbc = load_adam_dataset(\"adlbc\", project_root)\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>ANCOVA efficacy analysis</span>"
     ]
@@ -394,7 +394,7 @@
     "href": "analysis/tlf-06-specific.html",
     "title": "6  Specific adverse events",
     "section": "",
-    "text": "6.1 Setup\nimport sys\nimport os\n# Add the python-package directory to Python path for demo001 access\nsys.path.insert(0, os.path.join(os.path.dirname(os.getcwd()), 'python-package'))\n\nimport polars as pl\nimport rtflite as rtf\n\n# Import demo001 package functions\nfrom demo001 import find_project_root, load_adam_dataset\nfrom demo001.safety import create_ae_by_soc_table\npolars.config.Config\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadae = load_adam_dataset(\"adae\", project_root)\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]",
+    "text": "6.1 Setup\nimport polars as pl\nimport rtflite as rtf\n\nfrom demo001 import find_project_root, load_adam_dataset\nfrom demo001.safety import create_ae_by_soc_table\npolars.config.Config\n# Load data using demo001 utility functions\nproject_root = find_project_root()\nadsl = load_adam_dataset(\"adsl\", project_root)\nadae = load_adam_dataset(\"adae\", project_root)\ntreatments = [\"Placebo\", \"Xanomeline Low Dose\", \"Xanomeline High Dose\"]",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Specific adverse events</span>"
     ]
