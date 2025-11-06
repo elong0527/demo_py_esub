@@ -14,47 +14,7 @@
     "href": "index.html#overview",
     "title": "DEMO-001 Analysis Results",
     "section": "Overview",
-    "text": "Overview\ndemo-py-esub is a demo project that illustrates how to organize analysis scripts using Python in a recommended folder structure for clinical study reports and regulatory submissions.\nThis demo project follows the concepts discussed in Python for Clinical Study Reports and Submission.",
-    "crumbs": [
-      "DEMO-001"
-    ]
-  },
-  {
-    "objectID": "index.html#features",
-    "href": "index.html#features",
-    "title": "DEMO-001 Analysis Results",
-    "section": "Features",
-    "text": "Features\nBy using the recommended folder structure and associated development tools, this project demonstrates:\n\nConsistency: Standardized project organization\nAutomation: Automated testing and code quality checks\nReproducibility: Isolated environment management with uv\nCompliance: Best practices for regulatory submissions",
-    "crumbs": [
-      "DEMO-001"
-    ]
-  },
-  {
-    "objectID": "index.html#folder-structure",
-    "href": "index.html#folder-structure",
-    "title": "DEMO-001 Analysis Results",
-    "section": "Folder Structure",
-    "text": "Folder Structure\nThis project follows a standardized folder structure for clinical study reports and regulatory submissions:\n\nMinimal Sufficient Folders and Files\n\npyproject.toml: Python project metadata and dependencies\nuv.lock: Lock file for reproducible environments\n_quarto.yml: Quarto book configuration\nindex.qmd: Book homepage\nanalysis/: Analysis scripts using Quarto Markdown\ndata/: ADaM datasets in Parquet format\noutput/: Generated tables, listings, and figures (TLF)\n\n\n\nAdditional Folders and Files\n\n.venv/: Virtual environment (created by uv)\n.python-version: Python version specification\npython-package/demo001/: DEMO-001 study-specific Python package\n_book/: Rendered Quarto book output\n.gitignore: Git ignore patterns\n\n\n\nProject Structure\ndemo-py-esub/\n├── pyproject.toml           # Project configuration and dependencies\n├── uv.lock                  # Dependency lock file\n├── _quarto.yml             # Quarto book configuration\n├── index.qmd               # Book homepage\n├── analysis/               # Analysis scripts\n│   ├── tlf-01-disposition.qmd\n│   ├── tlf-02-population.qmd\n│   ├── tlf-03-baseline.qmd\n│   ├── tlf-04-efficacy-ancova.qmd\n│   ├── tlf-05-ae-summary.qmd\n│   └── tlf-06-specific.qmd\n├── data/                   # ADaM datasets\n│   ├── adsl.parquet\n│   ├── adae.parquet\n│   └── adlbc.parquet\n├── output/                 # Generated TLF outputs\n└── python-package/         # Clinical biostatistics package\n    └── demo001/\n        ├── __init__.py     # Package initialization\n        ├── utils.py        # Utility functions\n        ├── population.py   # Population analysis functions\n        ├── baseline.py     # Baseline characteristics functions\n        ├── safety.py       # Safety analysis functions\n        └── efficacy.py     # Efficacy analysis functions\n\n\nKey Goals of This Structure\n\nConsistency: Standardized organization across projects\nAutomation: Seamless integration with CI/CD pipelines\nReproducibility: Isolated environments and locked dependencies\nCompliance: Follows regulatory submission best practices\n\n\n\nBenefits of This Approach\n\nCode Reusability: Functions can be used across multiple analyses\nStandardization: Consistent methodology across studies\nQuality Assurance: Centralized, tested functions reduce errors\nRegulatory Compliance: Standardized approaches for submissions\nMaintainability: Easy to update and improve functions",
-    "crumbs": [
-      "DEMO-001"
-    ]
-  },
-  {
-    "objectID": "index.html#usage",
-    "href": "index.html#usage",
-    "title": "DEMO-001 Analysis Results",
-    "section": "Usage",
-    "text": "Usage\n\nInstall the Package\n# Install in development mode\nuv pip install -e .\n\n\nRun Analysis\n# Render all analysis reports\nquarto render\n\n# Or render individual files\nquarto render analysis/tlf-01-disposition.qmd",
-    "crumbs": [
-      "DEMO-001"
-    ]
-  },
-  {
-    "objectID": "index.html#requirements",
-    "href": "index.html#requirements",
-    "title": "DEMO-001 Analysis Results",
-    "section": "Requirements",
-    "text": "Requirements\n\nPython 3.14.0\nuv package manager",
+    "text": "Overview\ndemo-py-esub is a project that illustrates how to organize analysis scripts in a Python package for clinical study reports and regulatory submissions, while following the packaging best practices such as the Python Packaging User Guide.\nThis demo project follows the concepts discussed in Python for Clinical Study Reports and Submission.",
     "crumbs": [
       "DEMO-001"
     ]
@@ -64,7 +24,37 @@
     "href": "index.html#installation",
     "title": "DEMO-001 Analysis Results",
     "section": "Installation",
-    "text": "Installation\n\nClone the repository: bash  git https://github.com/elong0527/demo-py-esub  cd demo-py-esub\nInstall uv (if not already installed): bash  # Follow instructions at: https://pycsr.org/env-uv.html#installing-uv  curl -LsSf https://astral.sh/uv/install.sh | sh\nCreate and activate the project environment: bash  uv sync\nActivate the virtual environment:\n\nWindows: .venv\\Scripts\\activate\nmacOS/Linux: source .venv/bin/activate",
+    "text": "Installation\nInstall uv (if not already installed):\n# Follow instructions at: https://pycsr.org/env-uv.html#installing-uv\ncurl -LsSf https://astral.sh/uv/install.sh | sh\nClone the repository:\ngit https://github.com/elong0527/demo-py-esub\ncd demo-py-esub\nRestore and activate the project environment:\nuv sync\nActivate the virtual environment:\n\nWindows: .venv\\Scripts\\activate\nmacOS/Linux: source .venv/bin/activate",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Usage",
+    "text": "Usage\n\nInstall the package\n# Install in development mode\nuv pip install -e .\n\n\nRun analysis\n# Render all analysis reports\nquarto render\n\n# Or render specific reports\nquarto render analysis/tlf-01-disposition.qmd",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#folder-structure",
+    "href": "index.html#folder-structure",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Folder structure",
+    "text": "Folder structure\nThis project follows a standardized folder structure for clinical study reports and regulatory submissions:\n\nMinimal sufficient folders and files\n\npyproject.toml: Python project metadata and dependencies\nsrc/demo001/: Source code for the DEMO-001 study-specific package\ntests/: Unit tests for the package\ndata/: ADaM datasets in Parquet format\noutput/: Generated tables, listings, and figures (TLF)\n_quarto.yml: Quarto book configuration\nindex.qmd: Quarto book landing page\nanalysis/: Analysis scripts using Quarto Markdown\n\n\n\nAdditional folders and files\n\n.gitignore: Ignore patterns for version control\n.python-version: Python version specification (created by uv)\nuv.lock: Lock file for reproducible environments (created by uv)\n.venv/: Virtual environment (created by uv)\n_book/: Rendered Quarto book output\n\n\n\nProject structure\ndemo-py-esub/\n├── README.md               # Project overview\n├── _quarto.yml             # Quarto project configuration\n├── index.qmd               # Quarto book homepage\n├── pyproject.toml          # Project configuration and dependencies\n├── uv.lock                 # Dependency lock file\n├── analysis/               # Analysis documents\n│   ├── tlf-01-disposition.qmd\n│   ├── tlf-02-population.qmd\n│   ├── tlf-03-baseline.qmd\n│   ├── tlf-04-efficacy-ancova.qmd\n│   ├── tlf-05-ae-summary.qmd\n│   └── tlf-06-specific.qmd\n├── data/                   # ADaM datasets (parquet format)\n│   ├── adae.parquet\n│   ├── adlbc.parquet\n│   ├── adlbh.parquet\n│   ├── adlbhy.parquet\n│   ├── adsl.parquet\n│   ├── adtte.parquet\n│   └── advs.parquet\n├── output/                 # Generated TLF outputs\n│   ├── tlf_disposition.rtf\n│   ├── tlf_population.rtf\n│   ├── tlf_baseline.rtf\n│   ├── tlf_efficacy_ancova.rtf\n│   ├── tlf_ae_summary.rtf\n│   └── tlf_ae_specific.rtf\n├── src/                    # Clinical biostatistics Python package\n│   └── demo001/\n│       ├── __init__.py     # Package initialization\n│       ├── baseline.py     # Baseline characteristics functions\n│       ├── efficacy.py     # Efficacy analysis functions\n│       ├── population.py   # Population analysis functions\n│       ├── safety.py       # Safety analysis functions\n│       └── utils.py        # Shared utilities\n└── tests/                  # Automated test suite\n    ├── __init__.py\n    └── test_utils.py",
+    "crumbs": [
+      "DEMO-001"
+    ]
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "DEMO-001 Analysis Results",
+    "section": "Features",
+    "text": "Features\nBy using the recommended folder structure and associated development tools, this project demonstrates:\n\nConsistency: Standardized project organization\nAutomation: Automated testing and code quality checks\nReproducibility: Isolated environment management with uv\nCompliance: Best practices for regulatory submissions\n\nBenefits of this approach:\n\nCode reusability: Functions can be used across multiple analyses\nStandardization: Consistent methodology across studies\nQuality assurance: Centralized, tested functions reduce errors\nRegulatory compliance: Standardized approaches for submissions\nMaintainability: Easy to update and improve functions",
     "crumbs": [
       "DEMO-001"
     ]
@@ -174,7 +164,7 @@
     "href": "analysis/tlf-02-population.html#step-2-create-population-summary",
     "title": "2  Study population",
     "section": "2.2 Step 2: Create Population Summary",
-    "text": "2.2 Step 2: Create Population Summary\nUsing the demo001 package, we create a comprehensive population summary with all standard analysis populations.\n\n# Calculate treatment group totals\ntotals = adsl.group_by(\"TRT01P\").agg(total=pl.len())\ntotals\n\n\nshape: (3, 2)\n\n\n\nTRT01P\ntotal\n\n\nstr\nu32\n\n\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\"Placebo\"\n86\n\n\n\n\n\n\n\n# Create population summary using demo001 functions\npop_summary = create_population_summary(adsl)\npop_summary\n\n\nshape: (12, 3)\n\n\n\nTRT01P\nn\npopulation\n\n\nstr\nu32\nstr\n\n\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants in population\"\n\n\n\"Xanomeline Low Dose\"\n84\n\"Participants in population\"\n\n\n\"Placebo\"\n86\n\"Participants in population\"\n\n\n…\n…\n…\n\n\n\"Placebo\"\n86\n\"Participants included in safet…\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants included in safet…",
+    "text": "2.2 Step 2: Create Population Summary\nUsing the demo001 package, we create a comprehensive population summary with all standard analysis populations.\n\n# Calculate treatment group totals\ntotals = adsl.group_by(\"TRT01P\").agg(total=pl.len())\ntotals\n\n\nshape: (3, 2)\n\n\n\nTRT01P\ntotal\n\n\nstr\nu32\n\n\n\n\n\"Placebo\"\n86\n\n\n\"Xanomeline Low Dose\"\n84\n\n\n\"Xanomeline High Dose\"\n84\n\n\n\n\n\n\n\n# Create population summary using demo001 functions\npop_summary = create_population_summary(adsl)\npop_summary\n\n\nshape: (12, 3)\n\n\n\nTRT01P\nn\npopulation\n\n\nstr\nu32\nstr\n\n\n\n\n\"Xanomeline Low Dose\"\n84\n\"Participants in population\"\n\n\n\"Xanomeline High Dose\"\n84\n\"Participants in population\"\n\n\n\"Placebo\"\n86\n\"Participants in population\"\n\n\n…\n…\n…\n\n\n\"Placebo\"\n86\n\"Participants included in safet…\n\n\n\"Xanomeline Low Dose\"\n84\n\"Participants included in safet…",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Study population</span>"
     ]
