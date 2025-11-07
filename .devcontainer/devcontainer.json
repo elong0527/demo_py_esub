@@ -12,7 +12,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "uv sync && echo 'source /workspaces/demo-py-esub/.venv/bin/activate' >> ~/.bashrc",
+	"postCreateCommand": "uv sync",
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
