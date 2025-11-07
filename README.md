@@ -1,5 +1,7 @@
 # demo-py-esub
 
+[![](https://github.com/codespaces/badge.svg)](https://codespaces.new/elong0527/demo-py-esub?quickstart=1&devcontainer_path=.devcontainer%2Fdevcontainer.json)
+
 ## Overview
 
 `demo-py-esub` is a project that illustrates how to organize analysis scripts
